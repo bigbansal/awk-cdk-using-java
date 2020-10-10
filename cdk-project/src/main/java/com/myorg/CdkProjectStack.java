@@ -1,8 +1,8 @@
 package com.myorg;
 
-import software.amazon.awscdk.core.Construct;
-import software.amazon.awscdk.core.Stack;
-import software.amazon.awscdk.core.StackProps;
+import software.amazon.awscdk.core.*;
+import software.amazon.awscdk.services.iam.Group;
+import software.amazon.awscdk.services.s3.BlockPublicAccess;
 import software.amazon.awscdk.services.s3.Bucket;
 import software.amazon.awscdk.services.s3.BucketEncryption;
 
@@ -18,8 +18,25 @@ public class CdkProjectStack extends Stack {
 
         Bucket bucket = Bucket.Builder.create(this, "SiteBucket")
                 .bucketName("gouravbansal11.com")
-                .versioned(true)
-                .encryption(BucketEncryption.KMS_MANAGED)
+                .versioned(false)
+                .encryption(BucketEncryption.S3_MANAGED)
+                .blockPublicAccess(BlockPublicAccess.BLOCK_ALL)
                 .build();
+
+        String snstopicname = "snasds";
+        if (!Token.isUnresolved(snstopicname) && snstopicname.length() > 10)
+            throw new RuntimeException("topic name is incorrect");
+
+        System.out.println(bucket.getBucketName());
+
+            Bucket mybucket = Bucket.Builder.create(this, "SiteBucket1").build();
+
+        Group group = Group.Builder.create(this, "gid").build();
+
+            CfnOutput cfnOutput = CfnOutput.Builder.create(this, "myBucketOutput1")
+                    .value(mybucket.getBucketName())
+                    .description("My First CDK Bucket")
+                    .exportName("myBuckoutput1")
+                    .build();
     }
 }
