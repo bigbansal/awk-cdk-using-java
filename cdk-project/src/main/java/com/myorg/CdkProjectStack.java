@@ -16,6 +16,7 @@ public class CdkProjectStack extends Stack {
 
         // The code that defines your stack goes here
 
+
         Bucket bucket = Bucket.Builder.create(this, "SiteBucket")
                 .bucketName("gouravbansal11.com")
                 .versioned(false)
