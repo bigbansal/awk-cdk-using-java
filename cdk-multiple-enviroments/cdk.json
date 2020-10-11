@@ -3,6 +3,19 @@
   "context": {
     "@aws-cdk/core:enableStackNameDuplicates": "true",
     "aws-cdk:enableDiffNoFail": "true",
-    "@aws-cdk/core:stackRelativeExports": "true"
+    "@aws-cdk/core:stackRelativeExports": "true",
+    "main": "sssss",
+    "dev": {
+      "stackId" : "myDevStack",
+      "isProd" : false,
+      "region" : "eu-west-1",
+      "account": "1212121212"
+    },
+    "prod": {
+      "stackId" : "myProdStack",
+      "isProd" : true,
+      "region" : "us-east-1",
+      "account" : "12121215"
+    }
   }
 }

@@ -4,18 +4,20 @@ import software.amazon.awscdk.core.App;
 import software.amazon.awscdk.core.Environment;
 import software.amazon.awscdk.core.StackProps;
 
-import java.util.Arrays;
+import java.util.*;
 
 public class CdkMultipleEnviromentsApp {
     public static void main(final String[] args) {
         App app = new App();
+        Map prodMap = (LinkedHashMap) app.getNode().tryGetContext("prod");
+        Map devMap = (LinkedHashMap) app.getNode().tryGetContext("dev");
 
         StackProps stackProps_dev =
                 new StackProps.Builder()
                         .env(
                                 Environment.builder()
-                                        .region("us-east-1")
-                                        .account("12121212121212")
+                                        .region((String) devMap.get("region"))
+                                        .account((String)devMap.get("account"))
                                         .build())
                         .build();
 
@@ -23,12 +25,12 @@ public class CdkMultipleEnviromentsApp {
                 new StackProps.Builder()
                         .env(
                                 Environment.builder()
-                                        .region("eu-west-1")
-                                        .account("13333333333")
+                                        .region((String) prodMap.get("region"))
+                                        .account((String) prodMap.get("account"))
                                         .build())
                         .build();
-        new CdkMultipleEnviromentsStack(app, "myDevStack", stackProps_dev, false); //Dev
-        new CdkMultipleEnviromentsStack(app, "myProdStack", stackProps_prod, true); // Prod
+        new CdkMultipleEnviromentsStack(app, (String) devMap.get("stackId") , stackProps_dev, (Boolean) devMap.get("isProd")); //Dev
+        new CdkMultipleEnviromentsStack(app, (String) prodMap.get("stackId"), stackProps_prod, (Boolean) prodMap.get("isProd")); // Prod
 
         app.synth();
     }

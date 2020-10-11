@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.junit.Test;
+import software.amazon.awscdk.core.Environment;
+import software.amazon.awscdk.core.StackProps;
 
 import java.io.IOException;
 
@@ -17,7 +19,17 @@ public class CdkMultipleEnviromentsTest {
     @Test
     public void testStack() throws IOException {
         App app = new App();
-        CdkMultipleEnviromentsStack stack = new CdkMultipleEnviromentsStack(app, "test");
+
+        StackProps stackProps_prod =
+                new StackProps.Builder()
+                        .env(
+                                Environment.builder()
+                                        .region("eu-west-1")
+                                        .account("13333333333")
+                                        .build())
+                        .build();
+
+        CdkMultipleEnviromentsStack stack = new CdkMultipleEnviromentsStack(app, "test", stackProps_prod, false);
 
         // synthesize the stack to a CloudFormation template and compare against
         // a checked-in JSON file.
